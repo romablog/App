@@ -66,6 +66,7 @@ everyauth.twitter.consumerKey(config.get('TW:consumerKey')).consumerSecret(confi
     }).redirectPath(registrationRedirectPatn);
 
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
