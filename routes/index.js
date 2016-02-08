@@ -12,7 +12,7 @@ module.exports = function(app) {
 
     app.post('/registry', require('./registry').post);
     app.post('/logout', require('./logout').post);
-    app.get('/login', require('./login').get);
+    app.post('/login', require('./login').post);
     app.get('/host', require('./logout').get);
-    app.get('/user', require('./user').get)
+    app.get('/user', checkAuth, require('./user').get)
 };

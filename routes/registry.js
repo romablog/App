@@ -1,4 +1,4 @@
-var registrationRedirectPatn = "http://localhost:63342/Final_Proj/app/index.html";
+var Model = require('../models/model.js').Model;
 
 exports.post = function(req, res, next) {
     console.log(req.body);
@@ -7,5 +7,24 @@ exports.post = function(req, res, next) {
     var email = req.body.email;
     var surname = req.body.surname;
     var about = req.body.about;
-    res.redirect(registrationRedirectPatn);
+
+    Model.User.create({
+        theme: 'ligth',
+        language: 'EN',
+        firstName: username,
+        lastName: surname,
+        email: email,
+    })
+    res.statusCode(200);
+    var User = sequelize.define('user', {
+        theme: Sequelize.STRING,
+        language: Sequelize.STRING,
+        firstName: Sequelize.STRING,
+        lastName: Sequelize.STRING,
+        email: {
+            type: Sequelize.STRING,
+        },
+        about: Sequelize.STRING,
+        password: Sequelize.STRING
+    });
 };

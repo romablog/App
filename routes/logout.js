@@ -6,5 +6,5 @@ exports.post = function(req, res) {
 };
 
 exports.get = function(req, res) {
-  res.status(403).send({name : "artur"})
-};
+  res.sendStatus(403);
+}

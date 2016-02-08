@@ -11,7 +11,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var everyauth = require('everyauth');
-
+var store = require('./models/model').store;
 var registrationRedirectPatn = "http://localhost:63342/Final_Proj/app/index.html";
 var usersById = {};
 var usersByFbId = {};
@@ -49,28 +49,37 @@ everyauth.everymodule.findUserById( function (id, callback){ callback(null, user
 
 everyauth.facebook.appId(config.get('FB:appId')).appSecret(config.get('FB:appSecret'))
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+
       return usersByFbId[fbUserMetadata.id] || (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
     }).redirectPath(registrationRedirectPatn);
 
 everyauth.vkontakte.appId(config.get('VK:appId')).appSecret(config.get('VK:appSecret'))
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+
       return usersByVKId[fbUserMetadata.id] || (usersByVKId[fbUserMetadata.id] = addUser('vkontakte', fbUserMetadata));
     }).redirectPath(registrationRedirectPatn);
 
 everyauth.twitter.consumerKey(config.get('TW:consumerKey')).consumerSecret(config.get('TW:consumerSecret'))
     .findOrCreateUser( function (sess, accessToken, accessSecret, twitUser) {
+
       return usersByTwitId[twitUser.id] || (usersByTwitId[twitUser.id] = addUser('twitter', twitUser));
     }).redirectPath(registrationRedirectPatn);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+console.log("MY STORE",store);
+
 app.use(session({
+  name: "sid",
   secret: config.get('session:secret'),
-  key: config.get('session:key'),
-  cookie: config.get('session:cookie'),
-  resave: true,
+  //key: config.get('session:key'),
+  //cookie: config.get('session:cookie'),
+  store: store,
+  resave: false,
   saveUninitialized: true
 }));
 

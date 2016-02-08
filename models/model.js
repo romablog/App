@@ -12,6 +12,11 @@ var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.ge
     }
 });
 
+var session = require('express-session');
+console.log("session.Store: ",session.Store);
+var Store = require('express-sequelize-session')(session.Store);
+var store = new Store(sequelize);
+
 var Creative = sequelize.define('creative', {
     name: Sequelize.STRING,
     description: Sequelize.TEXT,
@@ -53,6 +58,8 @@ var Medal = sequelize.define('medal', {
     imageLink: Sequelize.STRING
 });
 
+User.belongsTo(store.Session, {foreignKeyConstraint: true});
+
 User.hasMany(Creative);
 
 Creative.belongsToMany(Tag, {through: "CreativeTag"});
@@ -82,20 +89,19 @@ var Model = {
     Category: Category,
     Tag: Tag
 };
+
+
+
 sequelize.sync({force: true})
-
-
     .then(function() {
         return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE'},
+            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma'},
             {firstName: 'JACK', lastName: 'DOE'}
         ])
     })
     .then(function(user) {
-        console.log(user);
         return Model.User.findAll()})
     .then(function(users) {
-        console.log(users[0]);
     })
     .then(function(){
         return Model.User.create({firstName: 'JANE', lastName: 'DOE'});
@@ -105,9 +111,8 @@ sequelize.sync({force: true})
     })
     .then(function(users){
         users.forEach(function(user) {
-            console.log(user.get({plain: true}))
         })
     });
 
-
+exports.store = store;
 exports.Model = Model;
