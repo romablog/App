@@ -36,8 +36,7 @@ var User = sequelize.define('user', {
 
     },
     birthday: {
-        type: Sequelize.STRING,
-f
+        type: Sequelize.STRING
     }
 });
 var Rating = sequelize.define('rating', {
@@ -53,9 +52,6 @@ var Medal = sequelize.define('medal', {
     name: Sequelize.TEXT,
     imageLink: Sequelize.STRING
 });
-
-sequelize.sync({force: true});
-
 
 User.hasMany(Creative);
 
@@ -86,14 +82,14 @@ var Model = {
     Category: Category,
     Tag: Tag
 };
-
-
 sequelize.sync({force: true})
+
+
     .then(function() {
         return Model.User.bulkCreate([
             {firstName: 'JOHN', lastName: 'DOE'},
             {firstName: 'JACK', lastName: 'DOE'}
-        ]);
+        ])
     })
     .then(function(user) {
         console.log(user);
@@ -112,4 +108,6 @@ sequelize.sync({force: true})
             console.log(user.get({plain: true}))
         })
     });
+
+
 exports.Model = Model;
