@@ -20,5 +20,11 @@
   "TW": {
     "consumerKey": "6ikoCsHIdUqsHZ7flxfNlXVMK",
     "consumerSecret": "3FKVcGaGkVWj6OlyCxpDQP9IYJ4JVWA8qBlZTRzUiOsx9wzTLl"
+  },
+  "DB": {
+    "user": "Roman",
+    "password": "nhfvdfq",
+    "table": "postgres",
+    "host": "local.host"
   }
 }

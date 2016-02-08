@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var Model = require('../models/model.js').Model;
-/* GET users listing. */
-router.get(function(req, res) {
+
+exports.get = (function(req, res) {
     Model.User.findAll()
         .then(function(users) {
-            res.send({one: "1"});
+
+            res.send({one: users.length});
         });
 });
-
-module.exports = router;

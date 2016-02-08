@@ -76,7 +76,6 @@ app.use(session({
 
 app.use(everyauth.middleware());
 app.use(require('./middleware/sendHttpError'));
-app.use(require('./middleware/loadUser'));
 
 require('./routes')(app);
 

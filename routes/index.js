@@ -12,5 +12,7 @@ module.exports = function(app) {
 
     app.post('/registry', require('./registry').post);
     app.post('/logout', require('./logout').post);
-    app.get('/login', require('./login').get)
+    app.get('/login', require('./login').get);
+    app.get('/host', require('./logout').get);
+    app.get('/user', require('./user').get)
 };

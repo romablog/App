@@ -1,10 +1,10 @@
 var async = require('async');
+var conf = require('../config');
 var util = require('util');
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize('postgres', 'postgres', 'rootpass', {
-    host: 'localhost',
+var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.get('DB:password'), {
+    host:  conf.get('DB:host'),
     dialect: 'postgres',
-
     pool: {
         max: 5,
         min: 0,
@@ -33,15 +33,11 @@ var User = sequelize.define('user', {
     nickName: Sequelize.STRING,
     email: {
         type: Sequelize.STRING,
-        validate: {
-            isEmail : true
-        }
+
     },
     birthday: {
         type: Sequelize.STRING,
-        validate: {
-            isDate: true
-        }
+f
     }
 });
 var Rating = sequelize.define('rating', {
