@@ -91,4 +91,29 @@ var Model = {
     Tag: Tag
 };
 
+
+sequelize.sync({force: true})
+    .then(function() {
+        return Model.User.bulkCreate([
+            {firstName: 'JOHN', lastName: 'DOE'},
+            {firstName: 'JACK', lastName: 'DOE'}
+        ]);
+    })
+    .then(function(user) {
+        console.log(user);
+        return Model.User.findAll()})
+    .then(function(users) {
+        console.log(users[0]);
+    })
+    .then(function(){
+        return Model.User.create({firstName: 'JANE', lastName: 'DOE'});
+    })
+    .then(function() {
+        return Model.User.findAll({where:{lastName: 'DOE'}})
+    })
+    .then(function(users){
+        users.forEach(function(user) {
+            console.log(user.get({plain: true}))
+        })
+    });
 exports.Model = Model;
