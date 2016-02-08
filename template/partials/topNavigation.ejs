@@ -14,13 +14,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="/" style="font-size: 15px">Home</a></li>
             </ul>
-            <ul class="nav navbar-nav">
-                <li><a href="/brain" style="font-size: 15px">Brains IDE</a></li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <% if (user) { %>
                 <li>
-                    <a href="" onclick="$('' + ' <form method=POST action=/logout>').submit();return false" style="font-size: 15px">Sign out</a>
+                    <a href="/logout">Sign out</a>
                 </li>
                 <% } else { %>
                 <li><a href="/registry" style="font-size: 15px">Sign up</a></li>

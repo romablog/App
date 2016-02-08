@@ -8,5 +8,17 @@
       "httpOnly": true,
       "maxAge": null
     }
+  },
+  "VK": {
+    "appId": "5272489",
+    "appSecret": "t6FP0eE5cyJJQsDsfm8r"
+  },
+  "FB": {
+    "appId": "909721822466644",
+    "appSecret": "d62ab2ef2ad4a7fc58046f5d8fc0f0d4"
+  },
+  "TW": {
+    "consumerKey": "6ikoCsHIdUqsHZ7flxfNlXVMK",
+    "consumerSecret": "3FKVcGaGkVWj6OlyCxpDQP9IYJ4JVWA8qBlZTRzUiOsx9wzTLl"
   }
 }

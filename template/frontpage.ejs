@@ -1,5 +1,17 @@
 <% layout('layout/page') -%>
 <% block('title', 'BrainFuck IDE'); %>
+<div id="fb-root"></div>
+<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
+<link rel="stylesheet" href="/bootstrap-social/bootstrap-social.css">
+<link href="/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
+
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.5&appId=909721822466644";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 <table align="center">
     <tr>
         <td>
@@ -7,8 +19,12 @@
                 A lot of the greatest prgrammers don't <br> know language BrainFuck.<br><br>
                 But You may try here!<br><br>
                 Please log or sign in!</p>
+            <% if (!everyauth.loggedIn) {%>
+            <p> NOT REGISTERED</p>
+            <%}%>
         </td>
-        <td style="padding-top: 50px"><img src="https://hsto.org/getpro/habr/post_images/171/431/4f6/1714314f691a44ba0f391e891ab92367.png" style="box-shadow: 0 0 50px 15px #1B1E32"/></td>
+
+        <!--<td style="padding-top: 50px"><img src="https://hsto.org/getpro/habr/post_images/171/431/4f6/1714314f691a44ba0f391e891ab92367.png" style="box-shadow: 0 0 50px 15px #1B1E32"/></td>-->
         <!--http://www.anypics.ru/large/201210/15554.jpg  http://www.pokeroff.ru/_i/uploads/post/2893126-full.jpg http://robl.co/wp-content/uploads/2014/09/apple-galaxy-wallpaper-940x500.jpg-->
     </tr>
     <tr>
