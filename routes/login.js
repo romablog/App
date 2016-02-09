@@ -6,13 +6,16 @@ exports.post = function(req, res, next) {
   var password = req.body.password;
   var email = req.body.email;
 
-  Model.User.findOne({ attributes:['firstName','lastName', 'email'], where: {email: email}})
+
+  Model.User.findOne({ attributes:['firstName','lastName', 'email'], where: {email: email, password: password}})
       .then(function(user) {
         if (!user) {
             console.log("403 error");
-          //res.sendStatus(403);
-            return null
+            res.sendStatus(403);
+            return null;
         } else {
+            req.session.id = user.id;
+            /*
           return store.Session.findOne({where: {sid: req.sessionID}})
               .then(function(session) {
                 console.log(req.sessionID, session);
@@ -26,6 +29,7 @@ exports.post = function(req, res, next) {
                     return user.setSession(session)
                 }
             })
+            */
         }
       })
       .then(function(user) {
