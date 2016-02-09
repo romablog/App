@@ -12,11 +12,6 @@ var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.ge
     }
 });
 
-var session = require('express-session');
-console.log("session.Store: ",session.Store);
-var Store = require('express-sequelize-session')(session.Store);
-var store = new Store(sequelize);
-
 var Creative = sequelize.define('creative', {
     name: Sequelize.STRING,
     description: Sequelize.TEXT,
@@ -31,16 +26,14 @@ var Tag = sequelize.define('tag', {
     name: Sequelize.TEXT
 });
 var User = sequelize.define('user', {
+    authId: Sequelize.STRING,
+    password: Sequelize.STRING,
     theme: Sequelize.STRING,
     language: Sequelize.STRING,
     firstName: Sequelize.STRING,
     lastName: Sequelize.STRING,
-    nickName: Sequelize.STRING,
+    about: Sequelize.STRING,
     email: {
-        type: Sequelize.STRING,
-
-    },
-    birthday: {
         type: Sequelize.STRING
     }
 });
@@ -58,7 +51,7 @@ var Medal = sequelize.define('medal', {
     imageLink: Sequelize.STRING
 });
 
-User.belongsTo(store.Session, {foreignKeyConstraint: true});
+//User.belongsTo(store.Session, {foreignKeyConstraint: true});
 
 User.hasMany(Creative);
 
@@ -114,5 +107,5 @@ sequelize.sync({force: true})
         })
     });
 
-exports.store = store;
+//exports.store = store;
 exports.Model = Model;

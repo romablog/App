@@ -1,4 +1,5 @@
 var Model = require('../models/model.js').Model;
+var uuid = require('uuid');
 
 exports.post = function(req, res, next) {
     console.log(req.body);
@@ -7,24 +8,14 @@ exports.post = function(req, res, next) {
     var email = req.body.email;
     var surname = req.body.surname;
     var about = req.body.about;
-
     Model.User.create({
+        authId: uuid.v1(),
         theme: 'ligth',
         language: 'EN',
         firstName: username,
         lastName: surname,
         email: email,
-    })
-    res.statusCode(200);
-    var User = sequelize.define('user', {
-        theme: Sequelize.STRING,
-        language: Sequelize.STRING,
-        firstName: Sequelize.STRING,
-        lastName: Sequelize.STRING,
-        email: {
-            type: Sequelize.STRING,
-        },
-        about: Sequelize.STRING,
-        password: Sequelize.STRING
+        about: about
     });
+    res.statusCode(200);
 };

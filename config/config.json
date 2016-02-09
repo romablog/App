@@ -11,15 +11,18 @@
   },
   "VK": {
     "appId": "5272489",
-    "appSecret": "t6FP0eE5cyJJQsDsfm8r"
+    "appSecret": "t6FP0eE5cyJJQsDsfm8r",
+    "callbackUrl": "http://local.host:3000/auth/vkontakte/callback"
   },
   "FB": {
     "appId": "909721822466644",
-    "appSecret": "d62ab2ef2ad4a7fc58046f5d8fc0f0d4"
+    "appSecret": "d62ab2ef2ad4a7fc58046f5d8fc0f0d4",
+    "callbackUrl": "http://local.host:3000/auth/facebook/callback"
   },
   "TW": {
-    "consumerKey": "6ikoCsHIdUqsHZ7flxfNlXVMK",
-    "consumerSecret": "3FKVcGaGkVWj6OlyCxpDQP9IYJ4JVWA8qBlZTRzUiOsx9wzTLl"
+    "appId": "6ikoCsHIdUqsHZ7flxfNlXVMK",
+    "appSecret": "3FKVcGaGkVWj6OlyCxpDQP9IYJ4JVWA8qBlZTRzUiOsx9wzTLl",
+    "callbackUrl": "http://local.host:3000/auth/twitter/callback"
   },
   "DB": {
     "user": "postgres",
