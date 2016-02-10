@@ -30,5 +30,10 @@
     "table": "postgres",
     "host": "localhost",
     "port": "5432"
+  },
+  "Cloud": {
+    "name": "doz0bmuqp",
+    "key": "131368181391855",
+    "secret": "VJbKTx3RlCAZGFvc3jeXghLE3LU"
   }
 }

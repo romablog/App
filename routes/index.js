@@ -4,16 +4,17 @@ module.exports = function(app) {
 
     app.use( '/', function( req, res, next ) {
         res.header("Access-Control-Allow-Origin", "http://localhost:8000");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
         res.header("Access-Control-Allow-Headers", "Content-Type, *");
-        res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, PATCH");
         res.header("Access-Control-Allow-Credentials", true);
         next();
     });
 
     app.post('/login', require('./login').post);
-    app.post('/regestry', require('./registry').post);
+    app.post('/registry', require('./registry').post);
     app.post('/logout', require('./logout').post);
+    app.post('/save/post', require('./post').save);
 
     //userpublications
 

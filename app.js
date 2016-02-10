@@ -10,6 +10,8 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var logger = require('morgan');
+var cors = require('cors');
 
 var app = express();
 
@@ -17,6 +19,11 @@ app.engine('ejs', require('ejs-locals'));
 app.set('views', __dirname + '/template');
 app.set('view engine', 'ejs');
 
+if (app.get('env') == 'development') {
+  app.use(logger('dev'));
+} else {
+  app.use(logger('default'));
+}
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cookieParser());
 app.use(bodyParser.json());

@@ -17,7 +17,9 @@ var Creative = sequelize.define('creative', {
     description: Sequelize.TEXT,
     body: Sequelize.TEXT,
     template: Sequelize.TEXT,
-    imageLink: Sequelize.STRING
+    imageLink: Sequelize.STRING,
+    videoLink: Sequelize.STRING,
+    map: Sequelize.STRING
 });
 var Category = sequelize.define('category', {
     name: Sequelize.TEXT
@@ -88,7 +90,7 @@ var Model = {
 sequelize.sync({force: true})
     .then(function() {
         return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma'},
+            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma'},
             {firstName: 'JACK', lastName: 'DOE'}
         ])
     })
