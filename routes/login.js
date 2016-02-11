@@ -10,7 +10,7 @@ exports.post = function(req, res, next) {
     Model.User.findOne({where: {email: email, password: password}})
         .then(function(user) {
             if (!user) {
-              res.sendStatus(403);
+              res.sendStatus(404);
             } else {
                 console.log(req.body);
                 req.session.user = user.authId;

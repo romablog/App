@@ -13,13 +13,11 @@ var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.ge
 });
 
 var Creative = sequelize.define('creative', {
-    title: Sequelize.STRING,
+    name: Sequelize.STRING,
     description: Sequelize.TEXT,
-    article: Sequelize.TEXT,
+    body: Sequelize.TEXT,
     template: Sequelize.TEXT,
-    imageLink: Sequelize.STRING,
-    videoLink: Sequelize.STRING,
-    map: Sequelize.STRING
+    imageLink: Sequelize.STRING
 });
 var Category = sequelize.define('category', {
     name: Sequelize.TEXT
@@ -90,8 +88,8 @@ var Model = {
 sequelize.sync({force: true})
     .then(function() {
         return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE', email: 'r@r.r',password:'1234', authId: 'iuulg'},
-
+            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password: '123'},
+            {firstName: 'JACK', lastName: 'DOE'}
         ])
     })
     .then(function(user) {
