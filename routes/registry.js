@@ -10,12 +10,13 @@ exports.post = function(req, res, next) {
     var about = req.body.about;
     Model.User.create({
         authId: uuid.v1(),
-        theme: 'ligth',
+        theme: 'light',
         language: 'EN',
         firstName: username,
         lastName: surname,
         email: email,
-        about: about
+        about: about,
+        password: password
     });
-    res.statusCode(200);
+    res.sendStatus(200);
 };

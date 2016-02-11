@@ -13,9 +13,9 @@ var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.ge
 });
 
 var Creative = sequelize.define('creative', {
-    name: Sequelize.STRING,
+    title: Sequelize.STRING,
     description: Sequelize.TEXT,
-    body: Sequelize.TEXT,
+    article: Sequelize.TEXT,
     template: Sequelize.TEXT,
     imageLink: Sequelize.STRING,
     videoLink: Sequelize.STRING,
@@ -90,8 +90,8 @@ var Model = {
 sequelize.sync({force: true})
     .then(function() {
         return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma'},
-            {firstName: 'JACK', lastName: 'DOE'}
+            {firstName: 'JOHN', lastName: 'DOE', email: 'r@r.r',password:'1234', authId: 'iuulg'},
+
         ])
     })
     .then(function(user) {
