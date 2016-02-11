@@ -21,6 +21,17 @@ var Creative = sequelize.define('creative', {
     videoLink: Sequelize.STRING,
     map: Sequelize.STRING
 });
+
+var Image = sequelize.define('image', {
+    url: Sequelize.STRING,
+    publicId: Sequelize.STRING
+});
+
+var Icon = sequelize.define('icon', {
+    url: Sequelize.STRING,
+    publicId: Sequelize.STRING
+});
+
 var Category = sequelize.define('category', {
     name: Sequelize.TEXT
 });
@@ -53,8 +64,6 @@ var Medal = sequelize.define('medal', {
     imageLink: Sequelize.STRING
 });
 
-//User.belongsTo(store.Session, {foreignKeyConstraint: true});
-
 User.hasMany(Creative);
 
 Creative.belongsToMany(Tag, {through: "CreativeTag"});
@@ -74,6 +83,9 @@ Comment.belongsTo(User);
 CommentRating.belongsTo(User);
 Comment.hasMany(Comment);
 
+Creative.hasOne(Image);
+User.hasOne(Icon);
+
 var Model = {
     Comment: Comment,
     Rating: Rating,
@@ -82,16 +94,16 @@ var Model = {
     User: User,
     Medal: Medal,
     Category: Category,
-    Tag: Tag
+    Tag: Tag,
+    Image: Image,
+    Icon: Icon
 };
-
-
 
 sequelize.sync({force: true})
     .then(function() {
         return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE', email: 'r@r.r',password:'1234', authId: 'iuulg'},
-
+            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"},
+            {firstName: 'JACK', lastName: 'DOE'}
         ])
     })
     .then(function(user) {
@@ -109,5 +121,4 @@ sequelize.sync({force: true})
         })
     });
 
-//exports.store = store;
 exports.Model = Model;

@@ -15,8 +15,7 @@ exports.post = function(req, res, next) {
         firstName: username,
         lastName: surname,
         email: email,
-        about: about,
-        password: password
+        about: about
     });
     res.sendStatus(200);
 };
