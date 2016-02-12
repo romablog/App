@@ -4,9 +4,8 @@
     "secret": "Killer",
     "key": "sid",
     "cookie": {
-      "path": "/",
       "httpOnly": true,
-      "maxAge": null
+      "maxAge": 10000
     }
   },
   "VK": {

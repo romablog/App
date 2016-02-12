@@ -11,7 +11,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var logger = require('morgan');
-var pg = require('pg')
+var pg = require('pg');
 var pgSession = require('connect-pg-simple')(session);
 
 var app = express();
@@ -38,7 +38,6 @@ app.use(session({
   }),
   secret: config.get('session:secret'),
   key: config.get('session:key'),
-  cookie: config.get('session:cookie'),
   resave: true,
   saveUninitialized: true
 }));
@@ -49,6 +48,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middleware/loadUser'));
 app.use(require('./middleware/sendHttpError'));
+app.use(require('./middleware/originPermission'));
 require('./routes')(app);
 
 app.use(function(err, req, res, next) {
