@@ -19,10 +19,7 @@ var Creative = sequelize.define('creative', {
     template: Sequelize.TEXT,
     imageLink: Sequelize.STRING,
     videoLink: Sequelize.STRING,
-    map: Sequelize.STRING
-});
-
-var Image = sequelize.define('image', {
+    map: Sequelize.STRING,
     url: Sequelize.STRING,
     publicId: Sequelize.STRING
 });
@@ -83,7 +80,6 @@ Comment.belongsTo(User);
 CommentRating.belongsTo(User);
 Comment.hasMany(Comment);
 
-Creative.hasOne(Image);
 User.hasOne(Icon);
 
 var Model = {
@@ -95,7 +91,6 @@ var Model = {
     Medal: Medal,
     Category: Category,
     Tag: Tag,
-    Image: Image,
     Icon: Icon
 };
 
