@@ -7,6 +7,6 @@ cloudinary.config({
     api_secret: conf.get('Cloud:secret')
 });
 
-exports.uploadToCloudinary = function(path, callback){
-    cloudinary.uploader.upload(path, callback)
+exports.uploadToCloudinary = function(path, callback) {
+    cloudinary.uploader.upload(path, callback);
 };

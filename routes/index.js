@@ -15,6 +15,7 @@ module.exports = function(app) {
     app.post('/registry', require('./registry').post);
     app.post('/logout', require('./logout').post);
     app.post('/post/save', require('./post').post);
+    app.get('/posts/:id', require('./post').allForUser);
 
     //userpublications
 

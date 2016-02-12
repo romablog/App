@@ -1,5 +1,4 @@
 var Model = require('../models/model.js').Model;
-var registrationRedirectPath = 'http://localhost:8000/app/#/';
 
 
 exports.post = function(req, res, next) {
