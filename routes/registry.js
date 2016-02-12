@@ -19,6 +19,7 @@ exports.post = function(req, res, next) {
         about: about,
         password: password
     }). then(function(user){
+        req.session.user = user.authId;
         res.send(user)
     });
 };

@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var logger = require('morgan');
+var pg = require('pg')
+var pgSession = require('connect-pg-simple')(session);
 
 var app = express();
 
@@ -29,6 +31,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
+  store: new pgSession({
+    pg : pg,
+    conString : 'postgres://' + config.get('DB:user') + ':' + config.get('DB:password') + '@' +  config.get('DB:host') + ':' + config.get('DB:port') + '/' + config.get('DB:table'),
+    tableName : 'session'
+  }),
   secret: config.get('session:secret'),
   key: config.get('session:key'),
   cookie: config.get('session:cookie'),
