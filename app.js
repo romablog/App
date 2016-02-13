@@ -10,6 +10,9 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var logger = require('morgan');
+var pg = require('pg');
+var pgSession = require('connect-pg-simple')(session);
 
 var app = express();
 
@@ -17,21 +20,24 @@ app.engine('ejs', require('ejs-locals'));
 app.set('views', __dirname + '/template');
 app.set('view engine', 'ejs');
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
+if (app.get('env') == 'development') {
+  app.use(logger('dev'));
+} else {
+  app.use(logger('default'));
+}
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
+  store: new pgSession({
+    pg : pg,
+    conString : 'postgres://' + config.get('DB:user') + ':' + config.get('DB:password') + '@' +  config.get('DB:host') + ':' + config.get('DB:port') + '/' + config.get('DB:table'),
+    tableName : 'session'
+  }),
   secret: config.get('session:secret'),
   key: config.get('session:key'),
-  cookie: config.get('session:cookie'),
   resave: true,
   saveUninitialized: true
 }));
@@ -42,6 +48,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('./middleware/loadUser'));
 app.use(require('./middleware/sendHttpError'));
+app.use(require('./middleware/originPermission'));
 require('./routes')(app);
 
 app.use(function(err, req, res, next) {
