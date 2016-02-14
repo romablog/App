@@ -25,7 +25,7 @@
   },
   "DB": {
     "user": "postgres",
-    "password" : "7729912",
+    "password" : "rootpass",
     "table": "postgres",
     "host": "localhost",
     "port": "5432"
