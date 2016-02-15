@@ -3,6 +3,9 @@ var conf = require('../config');
 var util = require('util');
 var Promise = require('bluebird');
 var Sequelize = require('sequelize');
+var cloudinary = require('../libs/cloudinary');
+
+
 var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.get('DB:password'), {
     host:  conf.get('DB:host'),
     dialect: 'postgres',
@@ -23,6 +26,13 @@ var Creative = sequelize.define('creative', {
     map: Sequelize.STRING,
     url: Sequelize.STRING,
     publicId: Sequelize.STRING
+    },
+    {
+        hooks: {
+            beforeDestroy : function(creative) {
+                cloudinary.destroy(creative.url);
+            }
+    }
 });
 
 var Icon = sequelize.define('icon', {
@@ -34,7 +44,7 @@ var Category = sequelize.define('category', {
     name: Sequelize.TEXT
 });
 var Tag = sequelize.define('tag', {
-    name: Sequelize.TEXT
+    name: Sequelize.STRING
 });
 var User = sequelize.define('user', {
     authId: Sequelize.STRING,
@@ -50,6 +60,12 @@ var User = sequelize.define('user', {
 });
 
 var Rating = sequelize.define('rating', {
+    score: Sequelize.INTEGER
+});
+var CreativeRating = sequelize.define('CreativeRating',{
+    score: Sequelize.INTEGER
+});
+var UserRating = sequelize.define('user_rating', {
     score: Sequelize.INTEGER
 });
 
@@ -74,8 +90,9 @@ Creative.belongsTo(Category);
 User.belongsToMany(Medal, {through: "UserMedal"});
 Medal.belongsToMany(User, {through: "UserMedal"});
 
-Rating.belongsTo(User);
-Creative.hasMany(Rating);
+//CreativeRating.belongsTo(User);
+User.hasMany(CreativeRating);
+Creative.hasMany(CreativeRating);
 
 Creative.hasMany(Comment);
 Comment.belongsTo(User);
@@ -94,20 +111,21 @@ var Model = {
     Medal: Medal,
     Category: Category,
     Tag: Tag,
-    Icon: Icon
+    Icon: Icon,
+    CreativeRating : CreativeRating
 };
 
 sequelize.sync({force: true}).then(function() {
     return Promise.all([Model.Creative.create({
         title: 'title',
         article : 'article'
-    }), Model.Rating.create({
+    }), Model.CreativeRating.create({
         score: 4
     }), Model.User.create(
         {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"})])
 }).spread(function(creative, rating, johnny) {
     console.log(johnny);
-    return [johnny.addCreative(creative), creative.addRating(rating)]
+    return [johnny.addCreative(creative), creative.addCreativeRating(rating),]
 });
 
 exports.Model = Model;

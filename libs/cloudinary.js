@@ -10,3 +10,7 @@ cloudinary.config({
 exports.uploadToCloudinary = function(path, callback) {
     cloudinary.uploader.upload(path, callback);
 };
+
+exports.destroy = function(publicId) {
+    cloudinary.uploader.destroy(publicId);
+};
