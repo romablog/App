@@ -67,6 +67,7 @@ exports.allForUser = function(req, res) {
     }).then(function(user){
         return user.getCreatives()
     }).then(function(arr){
+        console.log("QWERTY",arr);
         res.send(arr);
     }, function(){
         res.sendStatus(404);

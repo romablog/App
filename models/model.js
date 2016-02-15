@@ -1,6 +1,7 @@
 var async = require('async');
 var conf = require('../config');
 var util = require('util');
+var Promise = require('bluebird');
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.get('DB:password'), {
     host:  conf.get('DB:host'),
@@ -47,9 +48,11 @@ var User = sequelize.define('user', {
         type: Sequelize.STRING
     }
 });
+
 var Rating = sequelize.define('rating', {
     score: Sequelize.INTEGER
 });
+
 var Comment = sequelize.define('comment', {
     body: Sequelize.TEXT
 });
@@ -94,26 +97,17 @@ var Model = {
     Icon: Icon
 };
 
-sequelize.sync({force: true})
-    .then(function() {
-        return Model.User.bulkCreate([
-            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"},
-            {firstName: 'JACK', lastName: 'DOE'}
-        ])
-    })
-    .then(function(user) {
-        return Model.User.findAll()})
-    .then(function(users) {
-    })
-    .then(function(){
-        return Model.User.create({firstName: 'JANE', lastName: 'DOE'});
-    })
-    .then(function() {
-        return Model.User.findAll({where:{lastName: 'DOE'}})
-    })
-    .then(function(users){
-        users.forEach(function(user) {
-        })
-    });
+sequelize.sync({force: true}).then(function() {
+    return Promise.all([Model.Creative.create({
+        title: 'title',
+        article : 'article'
+    }), Model.Rating.create({
+        score: 4
+    }), Model.User.create(
+        {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"})])
+}).spread(function(creative, rating, johnny) {
+    console.log(johnny);
+    return [johnny.addCreative(creative), creative.addRating(rating)]
+});
 
 exports.Model = Model;

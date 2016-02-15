@@ -8,6 +8,8 @@ module.exports = function(app) {
     app.post('/post/save', require('./post').post);
     app.get('/posts/:id', require('./post').allForUser);
     app.get('/currentUser', require('./user').get);
+    app.get('/ratedarticles', require('./rating').getRateCreative);
+    app.post('/rate', require('./rating').rateCreative);
 
 
 
