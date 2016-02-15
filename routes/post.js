@@ -3,19 +3,19 @@ var Promise = require('bluebird');
 var cloudinary = require('../libs/cloudinary');
 var fs = require('fs');
 
-exports.post = function(req, res) {
+exports.post = function (req, res) {
 
-    var path = __dirname + '/'+ req.session.user +'.jpg';
-    var buff = new Buffer(req.body.img.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64');
+    var path = __dirname + '/' + req.session.user + '.jpg';
+    var buff = new Buffer(req.body.img.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64');
     fs.writeFile(path, buff);
     console.log(path);
-    var creative = new Promise(function(resolve, reject){
-        cloudinary.uploadToCloudinary(path, function(upload) {
+    var creative = new Promise(function (resolve, reject) {
+        cloudinary.uploadToCloudinary(path, function (upload) {
             console.log("UPLOADQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
             fs.unlink(path);
             resolve(upload);
         });
-    }).then (function(upload){
+    }).then(function (upload) {
         console.log(upload);
         return Model.Creative.create({
             title: req.body.title,
@@ -30,23 +30,26 @@ exports.post = function(req, res) {
     });
 
     var user = Model.User.findOne({
-        where: { authId: req.session.user }
+        where: {authId: req.session.user}
     });
 
-    var tag_array = Promise.all(req.body.tags.map(function(tag){
+    var tag_array = Promise.all(req.body.tags.map(function (tag) {
         return Model.Tag.findOrCreate({
-            where: { name: tag.name },
-            defaults: { name: tag.name }
+            where: {name: tag.name},
+            defaults: {name: tag.name}
         })
     }));
 
     Promise.all([user, creative, tag_array])
-        .spread(function(user, creative, tag_array) {
-            var tags = tag_array.map(function(tag_entry) { return tag_entry[0] });
+        .spread(function (user, creative, tag_array) {
+            var tags = tag_array.map(function (tag_entry) {
+                return tag_entry[0]
+            });
             return [
                 creative.addTags(tags),
-                user.addCreative(creative)]})
-        .spread(function(creative, user) {
+                user.addCreative(creative)]
+        })
+        .spread(function (creative, user) {
             if (creative && user) {
                 res.sendStatus(200);
             } else {
@@ -56,20 +59,24 @@ exports.post = function(req, res) {
 };
 
 
-
-
-exports.allForUser = function(req, res) {
+exports.allForUser = function (req, res) {
     var authId = req.params.id;
     Model.User.findOne({
-       where: {
-           authId: authId
-       }
-    }).then(function(user){
+        where: {
+            authId: authId
+        }
+    }).then(function (user) {
         return user.getCreatives()
-    }).then(function(arr){
-        console.log("QWERTY",arr);
-        res.send(arr);
-    }, function(){
+    }).then(function (creatives) {
+        return [creatives, Promise.all(creatives.map(function (creative) {
+            return creative.getCreativeRatings();
+        }))];
+    }).spread(
+        Model.AddScores
+    ).then(function (creatives) {
+        console.log("QWERTY", creatives);
+        res.send(creatives);
+    }, function () {
         res.sendStatus(404);
     });
 };

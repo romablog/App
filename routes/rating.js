@@ -8,17 +8,9 @@ exports.getRatedCreatives = function (req, res) {
             }));
             return [creatives, ratings];
         })
-        .spread(function (creatives, ratings) {
-            for (var i = 0; i < creatives.length; i++) {
-                creatives[i].ratings = ratings[i];
-            }
-            var sum = 0;
-            creatives.forEach(function (creative) {
-                creative.ratings.forEach(function (rating) {
-                    sum += rating.score;
-                });
-                creative.dataValues.score = sum / creative.ratings.length;
-            });
+        .spread(
+            Model.AddScores
+        ).then(function(creatives) {
             return creatives.sort().reverse().slice(0, 10);
         });
     ratedPosts.then(function (posts) {
@@ -50,13 +42,13 @@ exports.rateCreative = function (req, res) {
     Promise.all([creativeRatings, userRatings, currentUser])
         .spread(function (creativeRatings, userRatings, user) {
             creativeRatings.forEach(function (rating) {
-                //console.log(rating);
                 sum += rating.score;
             });
-            if (creativeRatings.some(function (creativeRating) {
-                    console.log("CRE USER & USER", creativeRating.userId, user.id );
-                    return creativeRating.userId == user.id;
-                })) {
+            var alreadyRated = creativeRatings.some(function (creativeRating) {
+                console.log("CRE USER & USER", creativeRating.userId, user.id );
+                return creativeRating.userId == user.id;
+            });
+            if (alreadyRated) {
                 res.sendStatus(403);
             } else {
                 return [Model.CreativeRating.create({score: score}), currentUser, currentCreative];

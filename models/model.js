@@ -112,7 +112,20 @@ var Model = {
     Category: Category,
     Tag: Tag,
     Icon: Icon,
-    CreativeRating : CreativeRating
+    CreativeRating : CreativeRating,
+    AddScores: function(creatives, ratings) {
+        var sums = ratings.map(function(ratings) {
+            var sum = 0;
+            ratings.forEach(function(rating) {
+                sum += rating.score;
+            });
+            return sum;
+        });
+        for (var i = 0; i < creatives.length; i++) {
+            creatives[i].dataValues.score = sums[i];
+        }
+        return creatives;
+    }
 };
 
 sequelize.sync({force: true}).then(function() {
@@ -125,7 +138,7 @@ sequelize.sync({force: true}).then(function() {
         {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"})])
 }).spread(function(creative, rating, johnny) {
     console.log(johnny);
-    return [johnny.addCreative(creative), creative.addCreativeRating(rating),]
+    return [johnny.addCreative(creative), creative.addCreativeRating(rating)]
 });
 
 exports.Model = Model;
