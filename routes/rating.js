@@ -10,6 +10,8 @@ exports.getRatedCreatives = function (req, res) {
         })
         .spread(
             Model.AddScores
+        ).then(
+            Model.AddUsers
         ).then(function(creatives) {
             return creatives.sort().reverse().slice(0, 10);
         });

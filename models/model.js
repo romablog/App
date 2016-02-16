@@ -7,7 +7,7 @@ var cloudinary = require('../libs/cloudinary');
 
 
 var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.get('DB:password'), {
-    host:  conf.get('DB:host'),
+    host: conf.get('DB:host'),
     dialect: 'postgres',
     pool: {
         max: 5,
@@ -17,23 +17,23 @@ var sequelize = new Sequelize(conf.get('DB:table'), conf.get('DB:user'), conf.ge
 });
 
 var Creative = sequelize.define('creative', {
-    title: Sequelize.STRING,
-    description: Sequelize.TEXT,
-    article: Sequelize.TEXT,
-    template: Sequelize.TEXT,
-    imageLink: Sequelize.STRING,
-    videoLink: Sequelize.STRING,
-    map: Sequelize.STRING,
-    url: Sequelize.STRING,
-    publicId: Sequelize.STRING
+        title: Sequelize.STRING,
+        description: Sequelize.TEXT,
+        article: Sequelize.TEXT,
+        template: Sequelize.TEXT,
+        imageLink: Sequelize.STRING,
+        videoLink: Sequelize.STRING,
+        map: Sequelize.STRING,
+        url: Sequelize.STRING,
+        publicId: Sequelize.STRING
     },
     {
         hooks: {
-            beforeDestroy : function(creative) {
+            beforeDestroy: function (creative) {
                 cloudinary.destroy(creative.url);
             }
-    }
-});
+        }
+    });
 
 var Icon = sequelize.define('icon', {
     url: Sequelize.STRING,
@@ -62,7 +62,7 @@ var User = sequelize.define('user', {
 var Rating = sequelize.define('rating', {
     score: Sequelize.INTEGER
 });
-var CreativeRating = sequelize.define('CreativeRating',{
+var CreativeRating = sequelize.define('CreativeRating', {
     score: Sequelize.INTEGER
 });
 var UserRating = sequelize.define('user_rating', {
@@ -72,9 +72,7 @@ var UserRating = sequelize.define('user_rating', {
 var Comment = sequelize.define('comment', {
     body: Sequelize.TEXT
 });
-var CommentRating = sequelize.define('comment_rating', {
-
-});
+var CommentRating = sequelize.define('comment_rating', {});
 var Medal = sequelize.define('medal', {
     name: Sequelize.TEXT,
     imageLink: Sequelize.STRING
@@ -112,11 +110,12 @@ var Model = {
     Category: Category,
     Tag: Tag,
     Icon: Icon,
-    CreativeRating : CreativeRating,
-    AddScores: function(creatives, ratings) {
-        var sums = ratings.map(function(ratings) {
+    CreativeRating: CreativeRating,
+
+    AddScores: function (creatives, ratings) {
+        var sums = ratings.map(function (ratings) {
             var sum = 0;
-            ratings.forEach(function(rating) {
+            ratings.forEach(function (rating) {
                 sum += rating.score;
             });
             return sum;
@@ -125,20 +124,45 @@ var Model = {
             creatives[i].dataValues.score = sums[i];
         }
         return creatives;
+    },
+    AddLikables: function (creatives, creativeRatings, user) {
+        var alreadyRated = creativeRatings.some(function (creativeRating) {
+            console.log("CRE USER & USER", creativeRating.userId, user.id);
+            return creativeRating.userId == user.id;
+        });
+    },
+    AddUsers: function (creatives) {
+        var userPromises = creatives.map(function (creative) {
+            return Model.User.findById(creative.userId)
+        });
+        Promise.all(userPromises).then(function(users) {
+            for (var i = 0; i < creatives.length; i++) {
+                creatives[i].dataValues.user = users[i].dataValues;
+            }
+        });
+        return creatives;
     }
 };
 
-sequelize.sync({force: true}).then(function() {
+sequelize.sync({force: true}).then(function () {
     return Promise.all([Model.Creative.create({
         title: 'title',
-        article : 'article'
-    }), Model.CreativeRating.create({
-        score: 4
-    }), Model.User.create(
-        {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password:'roma', authId:"12345"})])
-}).spread(function(creative, rating, johnny) {
-    console.log(johnny);
-    return [johnny.addCreative(creative), creative.addCreativeRating(rating)]
+        article: 'article'
+    }), Model.Creative.create({
+        title: 'title2',
+        article: 'article2'
+    }),
+        Model.CreativeRating.create({
+            score: -3
+        }), Model.User.create(
+            {firstName: 'JOHN', lastName: 'DOE', email: 'roma@roma.roma', password: 'roma', authId: "12345"})])
+}).spread(function (creative1, creative2, rating, johnny) {
+    // console.log(johnny);
+    return [
+        johnny.addCreative(creative1),
+        johnny.addCreative(creative2),
+        creative1.addCreativeRating(rating)
+    ]
 });
 
 exports.Model = Model;
