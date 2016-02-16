@@ -16,7 +16,7 @@ exports.getRatedCreatives = function (req, res) {
             return creatives.sort().reverse().slice(0, 10);
         });
     ratedPosts.then(function (posts) {
-        console.log(posts);
+        //console.log(posts);
         res.send(posts);
     }, function (err) {
         console.log(err);

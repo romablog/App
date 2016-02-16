@@ -135,12 +135,14 @@ var Model = {
         var userPromises = creatives.map(function (creative) {
             return Model.User.findById(creative.userId)
         });
-        Promise.all(userPromises).then(function(users) {
-            for (var i = 0; i < creatives.length; i++) {
-                creatives[i].dataValues.user = users[i].dataValues;
-            }
-        });
-        return creatives;
+        return new Promise (function(resolve, reject) {
+            return Promise.all(userPromises).then(function(users) {
+                for (var i = 0; i < creatives.length; i++) {
+                    creatives[i].dataValues.user = users[i].dataValues;
+                    console.log(users[i].dataValues);
+                }
+            }).then(function() {resolve(creatives)});
+        })
     }
 };
 
