@@ -111,7 +111,6 @@ var Model = {
     Tag: Tag,
     Icon: Icon,
     CreativeRating: CreativeRating,
-
     AddScores: function (creatives, ratings) {
         var sums = ratings.map(function (ratings) {
             var sum = 0;
@@ -135,18 +134,37 @@ var Model = {
         var userPromises = creatives.map(function (creative) {
             return Model.User.findById(creative.userId)
         });
-        return new Promise (function(resolve, reject) {
-            return Promise.all(userPromises).then(function(users) {
+        return new Promise(function (resolve, reject) {
+            return Promise.all(userPromises).then(function (users) {
                 for (var i = 0; i < creatives.length; i++) {
                     creatives[i].dataValues.user = users[i].dataValues;
                     console.log(users[i].dataValues);
                 }
-            }).then(function() {resolve(creatives)});
+            }).then(function () {
+                resolve(creatives)
+            });
         })
+    },
+    AddTags: function (creatives) {
+        var tagsPromises = creatives.map(function (creative) {
+            return creative.getTags();
+        });
+        return new Promise(function (resolve, reject) {
+            return Promise.all(tagsPromises)
+                .then(function (tags) {
+                    for (var i = 0; i < creatives.length; i++) {
+                        var tagValues = tags[i].map(function(tag) {return tag.dataValues});
+                        creatives[i].dataValues.tags = tagValues;
+                    }
+                }).then(function () {
+
+                    resolve(creatives);
+                });
+        });
     }
 };
 
-sequelize.sync({force: true}).then(function () {
+sequelize.sync({}).then(function () {
     return Promise.all([Model.Creative.create({
         title: 'title',
         article: 'article'

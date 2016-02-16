@@ -66,6 +66,7 @@ exports.allForUser = function (req, res) {
             authId: authId
         }
     }).then(function (user) {
+        console.log("TAGS", user.tags);
         return user.getCreatives()
     }).then(function (creatives) {
         return [creatives, Promise.all(creatives.map(function (creative) {
@@ -73,10 +74,21 @@ exports.allForUser = function (req, res) {
         }))];
     }).spread(
         Model.AddScores
+    ).then(
+        Model.AddTags
     ).then(function (creatives) {
-        console.log("QWERTY", creatives);
+       // console.log("QWERTY", creatives);
         res.send(creatives);
     }, function () {
-        res.sendStatus(404);
+        res.sendStatus(403);
     });
+};
+
+exports.getSpecificPost = function(req, res) {
+    var creativeId = req.body.id;
+    Model.Creative.findById(creativeId)
+        .then(function(post) {
+            res.send(post);
+        });
+
 };
