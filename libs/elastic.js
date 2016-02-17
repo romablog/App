@@ -32,7 +32,7 @@ function initMapping(indexName) {
                 title: { type: "string" },
                 suggest: {
                     type: "completion",
-                    analyzer: "standart",
+                    analyzer: "standard",
                     search_analyzer: "standard",
                     payloads: true
                 }

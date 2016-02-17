@@ -164,7 +164,7 @@ var Model = {
     }
 };
 
-sequelize.sync({}).then(function () {
+sequelize.sync({force: true}).then(function () {
     return Promise.all([Model.Creative.create({
         title: 'title',
         article: 'article'
@@ -183,28 +183,6 @@ sequelize.sync({}).then(function () {
         johnny.addCreative(creative2),
         creative1.addCreativeRating(rating)
     ]
-}).then(function(){
-        return Model.Tag.bulkCreate([
-            {name: "freedom happiness love"},
-            {name: "family kids wife"},
-            {name: "life job programming"}
-        ])
-    })
-    .then(function(){
-        return Model.Creative.bulkCreate([
-            {title: "my first creative", article: "hello world it's work"},
-            {title: "my family the best", article: "family is too important for everyone"},
-            {title: "state of building", article: "traveling!! if you have money you have to travel! JAM!"}
-        ])
-    })
-    .then(function(){
-        return Model.Comment.bulkCreate([
-            {body: "Good article"},
-            {body: "bad job"},
-            {body: "bad jober"},
-            {body: "good jober"},
-            {body: "nothing to read here("}
-        ])
-    });
+});
 
 exports.Model = Model;
