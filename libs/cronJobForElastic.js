@@ -3,7 +3,7 @@ var Model = require('../models/model.js').Model;
 var elastic = require('./elastic');
 var Promise = require('bluebird');
 
-var job = new CronJob('0 */5 * * * *', function() {
+var job = new CronJob('*/30 * * * * *', function() {
     console.log("job start", new Date());
     var tag = elastic.initialize("tag");
     var user = elastic.initialize("user");
@@ -27,9 +27,8 @@ var job = new CronJob('0 */5 * * * *', function() {
         var commentsPromises = comments.map(function (comment) {
             return elastic.add("comment",comment.body, comment.body);
         });
-
+        console.log(creatives.length);
         var creativesPromises = creatives.map(function (creative) {
-            console.log("creative");
             return elastic.add("creative",creative.title +" "+ creative.article, creative.title);
         });
 

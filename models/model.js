@@ -96,7 +96,7 @@ Creative.hasMany(Comment);
 Comment.belongsTo(User);
 
 CommentRating.belongsTo(User);
-Comment.hasMany(Comment);
+Comment.hasMany(CommentRating);
 
 User.hasOne(Icon);
 
