@@ -9,9 +9,8 @@ exports.post = function (req, res) {
     var buff = new Buffer(req.body.img.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64');
     fs.writeFile(path, buff);
     console.log(path);
-    var creative = new Promise(function (resolve, reject) {
-        cloudinary.uploadToCloudinary(path, function (upload) {
-            console.log("UPLOADQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+    var creative = new Promise(function(resolve, reject){
+        cloudinary.uploadToCloudinary(path, function(upload) {
             fs.unlink(path);
             resolve(upload);
         });
