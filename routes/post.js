@@ -8,7 +8,7 @@ exports.post = function (req, res) {
     var path = __dirname + '/' + req.session.user + '.jpg';
     var buff = new Buffer(req.body.img.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64');
     fs.writeFile(path, buff);
-    console.log(path);
+    //console.log(path);
     var creative = new Promise(function(resolve, reject){
         cloudinary.uploadToCloudinary(path, function(upload) {
             fs.unlink(path);
@@ -65,7 +65,7 @@ exports.allForUser = function (req, res) {
             authId: authId
         }
     }).then(function (user) {
-        console.log("TAGS", user.tags);
+        //console.log("TAGS", user.tags);
         return user.getCreatives()
     }).then(function (creatives) {
         return [creatives, Promise.all(creatives.map(function (creative) {

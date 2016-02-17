@@ -126,7 +126,7 @@ var Model = {
     },
     AddLikables: function (creatives, creativeRatings, user) {
         var alreadyRated = creativeRatings.some(function (creativeRating) {
-            console.log("CRE USER & USER", creativeRating.userId, user.id);
+            //console.log("CRE USER & USER", creativeRating.userId, user.id);
             return creativeRating.userId == user.id;
         });
     },
@@ -138,7 +138,7 @@ var Model = {
             return Promise.all(userPromises).then(function (users) {
                 for (var i = 0; i < creatives.length; i++) {
                     creatives[i].dataValues.user = users[i].dataValues;
-                    console.log(users[i].dataValues);
+                    //console.log(users[i].dataValues);
                 }
             }).then(function () {
                 resolve(creatives)
