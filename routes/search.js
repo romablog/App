@@ -5,14 +5,14 @@ var Promise = require('bluebird');
 //TODO достать пост по тэгу по комменту
 exports.get = function(req, res) {
 
-    //var tagPosts = elastic.getSuggestions("tag", req.params.input).then(function (result) {
-    //    var afterTag = result.docsuggest[0].options;
-    //    return Promise.all(afterTag.map(function (tag) {
-    //        return Model.Tag.findOne({ where: {name: tag.text}}).then(function(tag){
-    //            return tag;
-    //        });
-    //    }));
-    //});
+    var tagPosts = elastic.getSuggestions("tag", req.params.input).then(function (result) {
+        var afterTag = result.docsuggest[0].options;
+        return Promise.all(afterTag.map(function (tag) {
+            return Model.Tag.findOne({ where: {name: tag.text}}).then(function(tag){
+                return tag.getCreatives();
+            });
+        }));
+    });
 
     var userPosts = elastic.getSuggestions("user", req.params.input).then(function (result) {
         var afterUser = result.docsuggest[0].options;
