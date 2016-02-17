@@ -5,8 +5,12 @@ var Promise = require('bluebird');
 exports.get = function(req, res) {
 
     var tagPosts = elastic.getSuggestions("tag", req.params.input).then(function (result) {
-        var afterTag = result.docsuggest[0].options;
-        return Promise.all(afterTag.map(function (tag) {
+        console.log("TAG  ",result);
+        var afterElastic = [];
+        if (result.docsuggest){
+            afterElastic = result.docsuggest[0].options;
+        }
+        return Promise.all(afterElastic.map(function (tag) {
             return Model.Tag.findOne({ where: {name: tag.text}}).then(function(tag){
                 return tag.getCreatives();
             });
@@ -14,8 +18,12 @@ exports.get = function(req, res) {
     });
 
     var userPosts = elastic.getSuggestions("user", req.params.input).then(function (result) {
-        var afterUser = result.docsuggest[0].options;
-        return Promise.all(afterUser.map(function (userObj) {
+        console.log("USER  ",result);
+        var afterElastic = [];
+        if (result.docsuggest){
+            afterElastic = result.docsuggest[0].options;
+        }
+        return Promise.all(afterElastic.map(function (userObj) {
             return Model.User.findOne({ where: {authId: userObj.text}}).then(function(user){
                 return user.getCreatives();
             });
@@ -23,8 +31,12 @@ exports.get = function(req, res) {
     });
 
     var commentPosts = elastic.getSuggestions("comment", req.params.input).then(function (result) {
-        var afterComment = result.docsuggest[0].options;
-        return Promise.all(afterComment.map(function (commentObj) {
+        console.log("COMMENT  ",result);
+        var afterElastic = [];
+        if (result.docsuggest){
+            afterElastic = result.docsuggest[0].options;
+        }
+        return Promise.all(afterElastic.map(function (commentObj) {
             return Model.Comment.findOne({ where: {body: commentObj.text}}).then(function(comment){
                 return Model.Creative.findOne({where:{id: comment.creativeId}}).then(function(post){
                     return post;
@@ -34,8 +46,12 @@ exports.get = function(req, res) {
     });
 
     var creativePosts = elastic.getSuggestions("creative", req.params.input).then(function (result) {
-        var afterUser = result.docsuggest[0].options;
-        return Promise.all(afterUser.map(function (creativeObj) {
+        console.log("CREATIVE  ",result);
+        var afterElastic = [];
+        if (result.docsuggest){
+            afterElastic = result.docsuggest[0].options;
+        }
+        return Promise.all(afterElastic.map(function (creativeObj) {
             return Model.Creative.findOne({ where: {title: creativeObj.text}}).then(function(creative){
                 return creative;
             });

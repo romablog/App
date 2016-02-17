@@ -3,7 +3,7 @@ var Model = require('../models/model.js').Model;
 var elastic = require('./elastic');
 var Promise = require('bluebird');
 
-var job = new CronJob('0 */5 * * * *', function() {
+var job = new CronJob('0 */1 * * * *', function() {
     console.log("job start", new Date());
     var tag = elastic.initialize("tag");
     var user = elastic.initialize("user");
