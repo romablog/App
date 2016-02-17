@@ -13,7 +13,7 @@ exports.getRatedCreatives = function (req, res) {
         ).then(
             Model.AddUsers
         ).then(function(creatives) {
-            return creatives.sort().reverse().slice(0, 10);
+            return creatives.sort().reverse().slice(0, 50);
         });
     ratedPosts.then(
         Model.AddTags
@@ -21,7 +21,7 @@ exports.getRatedCreatives = function (req, res) {
         //console.log(posts);
         res.send(posts);
     }, function (err) {
-        console.log(err);
+        //console.log(err);
         res.sendStatus(402)
     });
 };
@@ -49,7 +49,7 @@ exports.rateCreative = function (req, res) {
                 sum += rating.score;
             });
             var alreadyRated = creativeRatings.some(function (creativeRating) {
-                console.log("CRE USER & USER", creativeRating.userId, user.id );
+                //console.log("CRE USER & USER", creativeRating.userId, user.id );
                 return creativeRating.userId == user.id;
             });
             if (alreadyRated) {

@@ -32,8 +32,8 @@ function initMapping(indexName) {
                 title: { type: "string" },
                 suggest: {
                     type: "completion",
-                    analyzer: "simple",
-                    search_analyzer: "simple",
+                    analyzer: "standard",
+                    search_analyzer: "standard",
                     payloads: true
                 }
             }
@@ -78,8 +78,8 @@ function getSuggestions(indexName, input) {
             docsuggest: {
                 text: input,
                 completion: {
-                    field: "suggest"
-                    //fuzzy: true
+                    field: "suggest",
+                    fuzzy: true
                 }
             }
         }
