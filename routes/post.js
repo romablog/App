@@ -4,18 +4,17 @@ var cloudinary = require('../libs/cloudinary');
 var fs = require('fs');
 
 exports.post = function (req, res) {
-
-    var path = __dirname + '/' + req.session.user + '.jpg';
+    var path = '/home/nikitz/' + req.session.user + '.jpg';
+    //var path = __dirname + '/' + req.session.user + '.jpg';
     var buff = new Buffer(req.body.img.replace(/^data:image\/(png|gif|jpeg);base64,/, ''), 'base64');
     fs.writeFile(path, buff);
-    //console.log(path);
     var creative = new Promise(function(resolve, reject){
         cloudinary.uploadToCloudinary(path, function(upload) {
             fs.unlink(path);
             resolve(upload);
         });
     }).then(function (upload) {
-        console.log(upload);
+        console.log('UPLOAD IS DEFINED WITH',upload);
         return Model.Creative.create({
             title: req.body.title,
             description: req.body.description,
@@ -59,13 +58,9 @@ exports.post = function (req, res) {
 
 
 exports.allForUser = function (req, res) {
-    var authId = req.params.id;
-    Model.User.findOne({
-        where: {
-            authId: authId
-        }
-    }).then(function (user) {
-        //console.log("TAGS", user.tags);
+    var id = req.params.id;
+    console.log(id)
+    Model.User.findById(id).then(function (user) {
         return user.getCreatives()
     }).then(function (creatives) {
         return [creatives, Promise.all(creatives.map(function (creative) {
@@ -76,7 +71,6 @@ exports.allForUser = function (req, res) {
     ).then(
         Model.AddTags
     ).then(function (creatives) {
-       // console.log("QWERTY", creatives);
         res.send(creatives);
     }, function () {
         res.sendStatus(403);
@@ -84,10 +78,16 @@ exports.allForUser = function (req, res) {
 };
 
 exports.getSpecificPost = function(req, res) {
-    var creativeId = req.body.id;
+    var creativeId = req.params.id;
+    console.log('MIGHTY ID', creativeId)
     Model.Creative.findById(creativeId)
         .then(function(post) {
-            res.send(post);
-        });
+            console.log('MIGHTY POST', post);
+            return [post]
+        }).then(
+            Model.AddTags
+        ).spread(function(creative) {
+            res.send(creative);
+    });
 
 };
